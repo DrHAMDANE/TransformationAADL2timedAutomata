@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ASCII"?>
+<aadldesr:AADLspec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadldesr="http://aadldesr/1.0" xsi:schemaLocation="http://aadldesr/1.0 ../Metamodels/AADLdesr.ecore" nom="clim">
+  <compose subcomponents="//@datas.1" subcomponentsp="//@processus.0" nom="climatiseur"/>
+  <datas nom="h"/>
+  <datas nom="temp"/>
+  <processus subcd="//@datas.1" subccompenets="//@threads.0 //@threads.2 //@threads.3" nom="proc1">
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="p1"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="p2"/>
+    </features>
+    <connections nom="con1" source="//@threads.0/@features/@ports.1" cible="//@processus.0/@features/@ports.0"/>
+    <connections nom="con2" source="//@processus.0/@features/@ports.1" cible="//@threads.0/@features/@ports.0"/>
+  </processus>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="5" nom="arret">
+    <annexe nom="a1">
+      <states nom="s0"/>
+      <states type="state" nom="s1"/>
+      <states type="final" nom="s2"/>
+      <transitions gard="temp&lt;16 or temp>16" action="sortie?" source="//@threads.0/@annexe/@states.0" target="//@threads.0/@annexe/@states.1" modifie="//@datas.1" etat="initial"/>
+      <transitions gard="h&lt;5" action="sortie?h=0" source="//@threads.0/@annexe/@states.1" target="//@threads.0/@annexe/@states.2" modifie="//@datas.0" etat="final"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="entree1"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="sortie1"/>
+    </features>
+    <connections nom="con3" source="//@threads.0/@features/@ports.1" cible="//@threads.1/@features/@ports.0"/>
+    <connections nom="con4" source="//@threads.2/@features/@ports.1" cible="//@threads.3/@features/@ports.0"/>
+  </threads>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="5" nom="marche">
+    <annexe nom="a2">
+      <states type="complete" nom="h1"/>
+      <transitions gard="temp==16 and h&lt;3" action="sortie3?" source="//@threads.1/@annexe/@states.0" target="//@threads.1/@annexe/@states.0" etat="final"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="entree2"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="sortie2"/>
+    </features>
+  </threads>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="5" nom="chaud">
+    <annexe nom="a4">
+      <states type="complete" nom="r1"/>
+      <transitions gard="temp&lt;16" action="h:=0" source="//@threads.2/@annexe/@states.0" target="//@threads.2/@annexe/@states.0" modifie="//@datas.0" etat="initial"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="entree3"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="sortie3"/>
+    </features>
+    <connections nom="ccon5" source="//@threads.3/@features/@ports.1" cible="//@threads.3/@features/@ports.0"/>
+  </threads>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="5" nom="inactif">
+    <annexe nom="a3">
+      <states type="complete" nom="r2"/>
+      <transitions gard="temp==16 and h&lt;3" action="sortie" source="//@threads.3/@annexe/@states.0" target="//@threads.3/@annexe/@states.0" etat="initial"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="entree4"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="sortie4"/>
+    </features>
+    <connections nom="con6" source="//@threads.3/@features/@ports.1" cible="//@threads.0/@features/@ports.0"/>
+  </threads>
+</aadldesr:AADLspec>

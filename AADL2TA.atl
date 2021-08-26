@@ -1,0 +1,84 @@
+-- @path AADL=/clim1_AADLD2TA/Metamodels/AADL.ecore
+-- @path TA=/clim1_AADLD2TA/Metamodels/TA.ecore
+
+module myAADT2TA;
+create OUT : TA from IN : AADL;
+
+----------------------------------------------------------------------------
+rule Process2TA{
+	from 
+	    M3:AADL!process
+	to
+	    M4:TA!timed_automata(
+	    nom<-M3.nom,
+		states<-M3.subccompenets,
+		clocks<-M3.subcd,
+		transitions<-M3.connectiont
+	    )
+} 
+-----------------------------------------------------------------------------
+
+rule data2clock{
+	from
+	    M1:AADL!data
+	to
+	    M2:TA!clock(
+	    nom<-M1.nom,
+		value<-M1.value
+	    )
+}
+-----------------------------------------------------------------------------
+rule thred2State{
+	from
+	    M5:AADL!thread
+	to
+	    M6:TA!state(
+	    nom<-M5.nom,
+		invariant<-M5.compute_execution_time
+	    )
+}
+-----------------------------------------------------------------------------
+helper context AADL!trannnsition def : IsFinal(): Boolean =
+	
+	if self.itsFianl then
+	    true
+	else
+		false
+	endif;
+
+rule transition2trnsition{
+	from
+	M7:AADL!trannnsition (M7.IsFinal())
+	--using {pi : AADL!connectionthread = null ; } 
+	to
+	-- travail sur le thread source
+	
+	M8:TA!transition(
+	guard <- M7.Condition,
+	action <- M7.Expression,
+	reset <- M7.InfPort--,
+--	source<-pi.sources,
+--target<-pi.target
+
+	   
+	
+	
+	-- Tk.guard = Condition /* the condition is in the left part of this transition*/
+    -- Tk.action = Expresion /* the expression is in the right part of this transition */
+    -- Tk.reset = the information send to the output port
+	
+	)
+}
+
+
+---------------------------------
+rule Connection2Transition{
+	from 
+	    M9:AADL!connectionthread 
+	to
+	    M10:TA!transition(
+	    --recupere G A R 	
+		source<-M9.sources,
+		target<-M9.target
+	    )
+}

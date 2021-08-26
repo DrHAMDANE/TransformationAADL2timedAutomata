@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="aadldesr"
+    nsURI="http://aadldesr/1.0" nsPrefix="aadldesr">
+  <eClassifiers xsi:type="ecore:EClass" name="AADLspec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compose" lowerBound="1"
+        eType="#//system" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datas" lowerBound="1" upperBound="-1"
+        eType="#//data" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processus" lowerBound="1"
+        upperBound="-1" eType="#//process" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="threads" lowerBound="1"
+        upperBound="-1" eType="#//thread" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="system">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subcomponents" lowerBound="1"
+        upperBound="-1" eType="#//data"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subcomponentsp" lowerBound="1"
+        upperBound="-1" eType="#//process"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" eType="#//feature"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="data">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="process">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subcd" lowerBound="1" eType="#//data"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subccompenets" lowerBound="1"
+        upperBound="-1" eType="#//thread"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectiont" lowerBound="1"
+        upperBound="-1" eType="#//connectionthread" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" lowerBound="1"
+        eType="#//feature" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" lowerBound="1"
+        upperBound="-1" eType="#//connection" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="thread">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dispatch_protocol" eType="#//TDispatch_Protocol"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compute_execution_time"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="call" lowerBound="1" upperBound="-1"
+        eType="#//suprogram" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annexe" lowerBound="1"
+        eType="#//annex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" lowerBound="1"
+        eType="#//feature" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" lowerBound="1"
+        upperBound="-1" eType="#//connection" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="suprogram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subcomponents" lowerBound="1"
+        upperBound="-1" eType="#//data"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annexe" lowerBound="1"
+        eType="#//annex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterss" upperBound="-1"
+        eType="#//parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TDispatch_Protocol">
+    <eLiterals name="periodic"/>
+    <eLiterals name="aperiodic" value="1"/>
+    <eLiterals name="sporadic" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="feature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" lowerBound="1" upperBound="-1"
+        eType="#//port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="access" lowerBound="1"
+        upperBound="-1" eType="#//Acces" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="port">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Ttype"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Acces">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="protocol" eType="#//Tprotocol"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Tderection">
+    <eLiterals name="In"/>
+    <eLiterals name="Out" value="1"/>
+    <eLiterals name="InOut" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Ttype">
+    <eLiterals name="event"/>
+    <eLiterals name="data" value="1"/>
+    <eLiterals name="eventdata" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Tprotocol">
+    <eLiterals name="HSER"/>
+    <eLiterals name="ASER" value="1"/>
+    <eLiterals name="LSER" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="connection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//PortOut"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cible" lowerBound="1" eType="#//PortIN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="annex">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="1"
+        upperBound="-1" eType="#//state" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" lowerBound="1"
+        upperBound="-1" eType="#//transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="state">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Tetat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="transition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//state"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//state"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifie" lowerBound="1"
+        upperBound="-1" eType="#//data"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="etat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Tetat">
+    <eLiterals name="initial"/>
+    <eLiterals name="state" value="1"/>
+    <eLiterals name="final" value="2"/>
+    <eLiterals name="complete" value="3"/>
+    <eLiterals name="initialreturn" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="connectionthread">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" lowerBound="1"
+        eType="#//thread"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//thread"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Tderection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortIN" eSuperTypes="#//port"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PortOut" eSuperTypes="#//port"/>
+</ecore:EPackage>

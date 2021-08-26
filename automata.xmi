@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ta="http://ta/1.0">
+  <ta:timed_automata nom="chauffage">
+    <states nom="rempli" invariant="60"/>
+    <states nom="chaufg" invariant="50"/>
+    <states nom="evacuer" invariant="25"/>
+    <transitions source="/0/@states.0" target="/0/@states.1"/>
+    <transitions source="/0/@states.1" target="/0/@states.2"/>
+    <transitions source="/0/@states.2" target="/0/@states.0"/>
+    <clocks nom="x"/>
+  </ta:timed_automata>
+  <ta:transition gard="x=50" action="remplir" reset="/0/@clocks"/>
+  <ta:transition gard="x=60" action="chauffage" reset="/0/@clocks"/>
+  <ta:transition gard="cal2.s1=0 and x=25" action="vide" reset="/0/@clocks"/>
+</xmi:XMI>

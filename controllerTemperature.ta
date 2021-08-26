@@ -1,0 +1,25 @@
+\\global declaration
+	clock x,y;
+	chan r,b1,b2,exit;
+	int t1=50;
+	int t2=30;
+	int tmax = 120;
+\\processes description 
+	process ctr{state wait,        te1,te2{y<=t1},te3{y<=t2},te4{x<=tmax};
+		init wait;
+		trans wait->te1{sync r?;assign x:=0;},
+		te1->te2 {sync b1!;assign x:=0,y:=0;},
+		te2->te3 {sync b2!;assign y:=0;},
+		te3->te4 {sync exit!;},
+		te4->te2 {guard x==tmax;sync b1?;assign x:=0,y:=0;},
+		te4->te1 {guard x<tmax;sync r?;assign x:=0;};}
+	process sensor{state start, bar1, bar2, end;
+		init start ;
+		trans start -> bar1{sync r!;},
+		start -> bar2{sync b1!;},
+		bar1 -> bar2{sync b1?;},
+		bar2 -> end{sync b2?;},
+		end -> start{sync exit?;};}
+\\system configuration
+system ctr,sensor;
+

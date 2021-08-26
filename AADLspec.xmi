@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ASCII"?>
+<aadldesr:AADLspec xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aadldesr="http://aadldesr/1.0" xsi:schemaLocation="http://aadldesr/1.0 /AADLD2TA/Metamodels/AADLdesr.ecore">
+  <compose subcomponents="//@datas.0" subcomponentsp="//@processus.0" nom="chauffages">
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="S1"/>
+      <ports xsi:type="aadldesr:PortOut" nom="S2"/>
+    </features>
+  </compose>
+  <datas nom="x"/>
+  <processus subcd="//@datas.0" subccompenets="//@threads.0 //@threads.1 //@threads.2" nom="chauffage">
+    <connectiont sources="//@threads.0" target="//@threads.1" nom="con1"/>
+    <connectiont sources="//@threads.1" target="//@threads.2" nom="con2"/>
+    <connectiont sources="//@threads.2" target="//@threads.0" nom="con3"/>
+  </processus>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="60" nom="rempli">
+    <call nom="remplir">
+      <annexe nom="anexe1">
+        <states type="initialreturn" nom="a0"/>
+        <transitions gard="" action="s:=s+1;m!s" source="//@threads.0/@call.0/@annexe/@states.0" target="//@threads.0/@call.0/@annexe/@states.0" etat="initial"/>
+      </annexe>
+      <parameterss nom="s"/>
+    </call>
+    <annexe nom="annexe1">
+      <states nom="r0"/>
+      <states type="state" nom="r1"/>
+      <states type="state" nom="r2"/>
+      <states type="final" nom="r3"/>
+      <transitions gard="x&lt;=50" action="cal1" source="//@threads.0/@annexe/@states.0" target="//@threads.0/@annexe/@states.1" modifie="//@datas.0" etat="initial"/>
+      <transitions gard="cal1.s&lt;=50 and x=50" action="sortie" source="//@threads.0/@annexe/@states.1" target="//@threads.0/@annexe/@states.2" modifie="//@datas.0" etat="intermidiaire"/>
+      <transitions gard="x=50" action="remplir" source="//@threads.0/@annexe/@states.2" target="//@threads.0/@annexe/@states.3" modifie="//@datas.0" etat="final"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="entree1"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="sortie1"/>
+      <access nom="cal1"/>
+    </features>
+    <connections nom="con1" source="//@threads.0/@features/@ports.1" cible="//@threads.1/@features/@ports.0"/>
+  </threads>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="50" nom="chaufg">
+    <annexe nom="annexe2">
+      <states nom="s0"/>
+      <states type="state" nom="s1"/>
+      <states type="final" nom="s2"/>
+      <transitions gard="x&lt;60" action="entree:=x+1" source="//@threads.1/@annexe/@states.0" target="//@threads.1/@annexe/@states.1" modifie="//@datas.0" etat="initial"/>
+      <transitions gard="x&lt;=60" source="//@threads.1/@annexe/@states.1" target="//@threads.1/@annexe/@states.0" modifie="//@datas.0" etat=""/>
+      <transitions gard="x=60" action="chauffage" source="//@threads.1/@annexe/@states.1" target="//@threads.1/@annexe/@states.2" modifie="//@datas.0" etat="final"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" type="eventdata" nom="entree2"/>
+      <ports xsi:type="aadldesr:PortOut" type="eventdata" nom="sortie2"/>
+    </features>
+    <connections nom="con2" source="//@threads.1/@features/@ports.1" cible="//@threads.2/@features/@ports.0"/>
+  </threads>
+  <threads dispatch_protocol="aperiodic" compute_execution_time="25" nom="evacuer">
+    <call nom="evacu">
+      <annexe nom="anexe2">
+        <states type="initialreturn" nom="b0"/>
+        <transitions action="s1:=s1-1;m1!s1" source="//@threads.2/@call.0/@annexe/@states.0" target="//@threads.2/@call.0/@annexe/@states.0" etat="initial"/>
+      </annexe>
+      <parameterss nom="s1"/>
+    </call>
+    <annexe nom="annexe3">
+      <states nom="e0"/>
+      <states type="state" nom="e1"/>
+      <states type="state" nom="e2"/>
+      <states type="final" nom="e3"/>
+      <transitions gard="x&lt;=25" action="sortie3:=x+1" source="//@threads.2/@annexe/@states.0" target="//@threads.2/@annexe/@states.1" modifie="//@datas.0" etat="initial"/>
+      <transitions gard="x&lt;25" source="//@threads.2/@annexe/@states.1" target="//@threads.2/@annexe/@states.0" modifie="//@datas.0" etat="intermediaire"/>
+      <transitions gard="x>=20 and x&lt;=25" action="cal2!(s1)" source="//@threads.2/@annexe/@states.1" target="//@threads.2/@annexe/@states.2" modifie="//@datas.0" etat="intermediaire"/>
+      <transitions gard="cal2.s1=0 and x=25" action="vide" source="//@threads.2/@annexe/@states.2" target="//@threads.2/@annexe/@states.3" modifie="//@datas.0" etat="final"/>
+    </annexe>
+    <features>
+      <ports xsi:type="aadldesr:PortIN" nom="entree3"/>
+      <ports xsi:type="aadldesr:PortOut" nom="sortie3"/>
+      <access nom="cal2"/>
+    </features>
+    <connections nom="con3" source="//@threads.2/@features/@ports.1" cible="//@threads.0/@features/@ports.0"/>
+  </threads>
+</aadldesr:AADLspec>

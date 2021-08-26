@@ -1,0 +1,126 @@
+«IMPORT metamodel»
+
+
+«DEFINE main FOR Automate»
+
+«FILE this.name+".ta"»
+
+//Global declaration
+
+clock «EXPAND clock2text FOREACH clocks SEPARATOR ',' »;
+chan «EXPAND chan2text FOREACH transitions SEPARATOR ',' »;
+
+ 
+process «this.name» {
+//  recupere tous les états
+state «EXPAND state2text FOREACH states SEPARATOR ','»;
+
+//  recupère l'état initial
+«EXPAND intialState2text FOREACH states»
+
+trans «EXPAND transition2text FOREACH transitions SEPARATOR ','»
+ ;
+
+}
+
+
+
+
+process sensor{
+
+state start, bar1, bar2, end;
+
+init start ;
+
+
+trans
+start -> bar1
+{
+sync r!;},
+
+start -> bar2{sync b1!;},
+
+
+bar1 -> bar2
+ {sync b1?;},
+
+bar2 -> end
+  {sync b2?;},
+
+
+end -> start
+ {
+sync exit?;
+
+};
+
+
+}
+
+
+
+
+system ctr,sensor;
+
+system «this.name», user;
+«ENDFILE»
+	
+	
+«ENDDEFINE»
+
+«REM» traitement des horloges «ENDREM»
+«DEFINE clock2text FOR Clock»
+«this.name»
+«ENDDEFINE»
+«REM» traitement de l'état initial «ENDREM»
+«DEFINE intialState2text FOR State»
+«IF this.isInitial==true»
+init «this.name»;
+«ENDIF»
+«ENDDEFINE»
+
+«REM» traitement cannal de communication «ENDREM»
+«DEFINE chan2text FOR Transition »
+«REM» recupère uniquement le premier caractère«ENDREM»
+«this.action.subString(0,1).toLowerCase()»
+
+«ENDDEFINE»
+
+
+
+«REM» traitement des états «ENDREM»
+«DEFINE state2text FOR State»
+«IF this.Invariant=='null'»  
+    «this.name»
+   «ELSE»
+   «this.name» {«this.Invariant»}
+ 
+ «ENDIF»
+
+«ENDDEFINE»
+
+
+«REM» traitement des trantitions «ENDREM»
+
+«DEFINE transition2text FOR Transition»
+«this.source.name» -> «this.target.name» {
+«REM» guard «ENDREM»
+«IF this.guard !='null'»   
+  guard «this.guard» ;
+  «ELSE»
+ «ENDIF»
+  «REM» action «ENDREM»
+ «IF this.action !='null'»
+      sync «this.action»; 
+  «ELSE»
+«ENDIF»
+
+«REM» mise à jour des horloges  «ENDREM»
+ «IF this.reset !='null'»
+
+assign «this.reset»
+  «ELSE»
+«ENDIF»
+}
+
+«ENDDEFINE»
